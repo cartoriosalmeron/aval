@@ -88,21 +88,34 @@
       });
     });
 
-    function submitFeedback() {
-      if (selectedScore === null) {
-        alert('Por favor, selecione uma nota.');
-        return;
-      }
-      const comment = document.getElementById('comment').value;
-      console.log('Nota:', selectedScore);
-      console.log('Comentário:', comment);
+function submitFeedback() {
+  if (selectedScore === null) {
+    alert('Por favor, selecione uma nota.');
+    return;
+  }
 
-      document.getElementById('thankYou').style.display = 'block';
-      setTimeout(() => {
-        document.getElementById('thankYou').style.display = 'none';
-        window.location.reload();
-      }, 5000);
-    }
+  const comment = document.getElementById('comment').value;
+
+  // Enviar os dados para a planilha via Google Apps Script
+  fetch('https://script.google.com/macros/s/AKfycbzunCvU-QmYxFMCB6_OU8tPfY-f0t8aTfxgch2JFmkyFKSz1eoyIHwxRdF_i0MJ0u41/exec', {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: new URLSearchParams({
+      'Nota': selectedScore,
+      'Observações': comment
+    })
+  });
+
+  // Feedback visual para o usuário
+  document.getElementById('thankYou').style.display = 'block';
+  setTimeout(() => {
+    document.getElementById('thankYou').style.display = 'none';
+    window.location.reload();
+  }, 5000);
+}
   </script>
 </body>
 </html>
